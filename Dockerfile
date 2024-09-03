@@ -7,5 +7,7 @@ RUN apt upgrade -y
 
 RUN apt install make -y
 
+EXPOSE 8080
+
 CMD ["sleep", "infinity"]
 
