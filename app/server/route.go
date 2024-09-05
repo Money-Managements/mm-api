@@ -30,15 +30,18 @@ func getRoutes() []schema.Route {
 	var routes []schema.Route
 
 	for _, getRoutes := range getRoutesFuncs {
-		routeSettingBase := getRoutes()
-		routeSetting := setRouteSetting(routeSettingBase.Routes, routeSettingBase.Routing)
+		routeDetail := getRoutes()
+		routeSetting := setRouteSetting(routeDetail)
 		routes = append(routes, routeSetting...)
 	}
 
 	return routes
 }
 
-func setRouteSetting(routes []schema.Route, routing schema.Routing) []schema.Route {
+func setRouteSetting(routeDetail schema.RouteDetail) []schema.Route {
+	routes := routeDetail.Routes
+	routing := routeDetail.Routing
+
 	for i := range routes {
 		if routes[i].Group == "" {
 			routes[i].Group = routing.Group
