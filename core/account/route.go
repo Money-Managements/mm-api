@@ -2,13 +2,12 @@ package account
 
 import (
 	"money-manager/internal/constant"
-	"money-manager/internal/helper"
 	"money-manager/internal/schema"
 	"net/http"
 )
 
-func GetRoutes() []schema.Route {
-	routeSetting := schema.RouteDetail{
+func GetRoutes() schema.RouteDetail {
+	return schema.RouteDetail{
 		Routing: schema.Routing{
 			Version: constant.V1,
 			Group:   constant.Account,
@@ -21,5 +20,4 @@ func GetRoutes() []schema.Route {
 		},
 	}
 
-	return helper.SetRoute(routeSetting)
 }
