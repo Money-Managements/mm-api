@@ -14,8 +14,7 @@ func GetRoutes() schema.RouteDetail {
 		},
 		Routes: []schema.Route{
 			{
-				Method:  http.MethodGet,
-				Handler: GetLocations,
+				Method: http.MethodGet,
 			},
 		},
 	}

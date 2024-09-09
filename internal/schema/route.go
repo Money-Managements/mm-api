@@ -1,12 +1,11 @@
 package schema
 
-import "github.com/labstack/echo/v4"
-
 type Route struct {
 	Routing
-	Method   string
-	EndPoint string
-	Handler  echo.HandlerFunc
+	ServiceName string
+	Service     ActionService
+	Method      string
+	EndPoint    string
 }
 
 type Routing struct {

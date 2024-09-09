@@ -7,16 +7,19 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
-func setRoutes(e *echo.Echo) {
+func setRoutes(e *echo.Echo, db *gorm.DB) {
 	routes := getRoutes()
 	groupApi, groupVersionMap, groupCoreMap := getGroupCollections(e)
+	services := getServices(db)
 
 	for _, route := range routes {
 		groupVersion, _ := setGroupRoute(route.Version, groupApi, groupVersionMap)
 		groupCore, _ := setGroupRoute(route.Group, groupVersion, groupCoreMap)
-		setRouteMethod(route, groupCore)
+		route.Service = services[route.ServiceName].Action
+		setRouteMethod(route, groupCore, route.Service)
 		logSettedRoute(route)
 	}
 }
@@ -76,19 +79,30 @@ func setGroupRoute(pathRoute string, groupBase *echo.Group, groupCollection map[
 	return group, existGroup
 }
 
-func setRouteMethod(route schema.Route, groupCore *echo.Group) {
+func setRouteMethod(route schema.Route, groupCore *echo.Group, service schema.ActionService) {
+	handler := getHandler(service)
+
 	switch route.Method {
 	case http.MethodGet:
-		groupCore.GET(route.EndPoint, route.Handler)
+		groupCore.GET(route.EndPoint, handler)
 	case http.MethodPost:
-		groupCore.POST(route.EndPoint, route.Handler)
+		groupCore.POST(route.EndPoint, handler)
 	case http.MethodPatch:
-		groupCore.PUT(route.EndPoint, route.Handler)
+		groupCore.PATCH(route.EndPoint, handler)
 	case http.MethodDelete:
-		groupCore.DELETE(route.EndPoint, route.Handler)
+		groupCore.DELETE(route.EndPoint, handler)
 	default:
 		println("Unsupported method: " + route.Method)
 	}
+}
+
+func getHandler(service schema.ActionService) func(c echo.Context) error {
+	handler := func(c echo.Context) error {
+		service(c)
+		return c.String(http.StatusOK, "money-manager")
+	}
+
+	return handler
 }
 
 func logSettedRoute(route schema.Route) {

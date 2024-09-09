@@ -14,8 +14,8 @@ func GetRoutes() schema.RouteDetail {
 		},
 		Routes: []schema.Route{
 			{
-				Method:  http.MethodGet,
-				Handler: GetAccounts,
+				ServiceName: constant.AcccountServiceGet,
+				Method:      http.MethodGet,
 			},
 		},
 	}

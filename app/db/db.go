@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"money-manager/app/db/model"
 	"money-manager/internal/constant"
 	"os"
 
@@ -20,15 +21,24 @@ type DBConfig struct {
 	Loc       string
 }
 
-func ConnectDB() {
+func ConnectDB() *gorm.DB {
 	dsn := getDNS(getDBConfig())
-	_, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		panic("failed to connect to the database")
 	}
 
 	fmt.Println("Database connection established!")
+
+	// Migrate the schema TODO: use migrations
+	db.AutoMigrate(&model.Account{})
+	db.AutoMigrate(&model.Location{})
+	db.AutoMigrate(&model.Money{})
+	db.AutoMigrate(&model.MoneyAccount{})
+	db.AutoMigrate(&model.MoneyTransaction{})
+
+	return db
 }
 
 func getDNS(config DBConfig) string {
