@@ -14,7 +14,7 @@ type Service struct {
 	Services []schema.Service
 }
 
-func SetAccountService(serviceSetting schema.ServiceSetting) *Service {
+func SetService(serviceSetting schema.ServiceSetting) *Service {
 	service := &Service{
 		DB:   serviceSetting.DB,
 		Name: constant.AccountService,
@@ -32,7 +32,7 @@ func (s *Service) Get(c echo.Context) {
 	println("Working")
 }
 
-func (s *Service) Add() {
+func (s *Service) Add(c echo.Context) {
 
 }
 

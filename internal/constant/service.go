@@ -18,4 +18,5 @@ const (
 const (
 	AcccountServiceGet = AccountService + Get
 	AccountServiceAdd  = AccountService + Add
+	ManagerServiceAdd  = ManagerService + Add
 )

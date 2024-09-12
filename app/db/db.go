@@ -23,6 +23,7 @@ type DBConfig struct {
 
 func ConnectDB() *gorm.DB {
 	dsn := getDNS(getDBConfig())
+	println(dsn)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {

@@ -3,6 +3,7 @@ package server
 import (
 	"money-manager/core/account"
 	"money-manager/core/location"
+	"money-manager/core/manager"
 	"money-manager/internal/schema"
 
 	"gorm.io/gorm"
@@ -18,10 +19,13 @@ func getServices(db *gorm.DB) map[string]schema.Service {
 		DB: db,
 	}
 
-	accountService := account.SetAccountService(serviceSetting)
+	accountService := account.SetService(serviceSetting)
+
+	managerService := manager.SetService(serviceSetting, manager.Dependencies{AccountServiceAdd: accountService.Add})
 
 	serviceCollection := []schema.Service{}
 
+	serviceCollection = append(serviceCollection, managerService.Services...)
 	serviceCollection = append(serviceCollection, accountService.Services...)
 
 	services := make(map[string]schema.Service)
