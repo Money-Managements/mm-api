@@ -1,20 +1,22 @@
-package location
+package routes
 
 import (
+	"money-manager/core/handlers"
 	"money-manager/internal/constant"
 	"money-manager/internal/schema"
 	"net/http"
 )
 
-func GetRoutes() schema.RouteDetail {
+func GetAccountRoutes() schema.RouteDetail {
 	return schema.RouteDetail{
 		Routing: schema.Routing{
 			Version: constant.V1,
-			Group:   constant.Location,
+			Group:   constant.Account,
 		},
 		Routes: []schema.Route{
 			{
-				Method: http.MethodGet,
+				Handler: handlers.GetAccountHandler,
+				Method:  http.MethodGet,
 			},
 		},
 	}

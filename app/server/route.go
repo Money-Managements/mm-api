@@ -1,33 +1,29 @@
 package server
 
 import (
-	"money-manager/core/account"
-	"money-manager/core/location"
+	"money-manager/core/routes"
 	"money-manager/internal/schema"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
-func setRoutes(e *echo.Echo, db *gorm.DB) {
+func setRoutes(e *echo.Echo) {
 	routes := getRoutes()
 	groupApi, groupVersionMap, groupCoreMap := getGroupCollections(e)
-	services := getServices(db)
 
 	for _, route := range routes {
 		groupVersion, _ := setGroupRoute(route.Version, groupApi, groupVersionMap)
 		groupCore, _ := setGroupRoute(route.Group, groupVersion, groupCoreMap)
-		route.Service = services[route.ServiceName].Action
-		setRouteMethod(route, groupCore, route.Service)
+
+		setRouteMethod(route, groupCore, route.Handler)
 		logSettedRoute(route)
 	}
 }
 
 func getRoutes() []schema.Route {
 	getRoutesFuncs := []func() schema.RouteDetail{
-		account.GetRoutes,
-		location.GetRoutes,
+		routes.GetAccountRoutes,
 	}
 
 	var routes []schema.Route
@@ -79,9 +75,7 @@ func setGroupRoute(pathRoute string, groupBase *echo.Group, groupCollection map[
 	return group, existGroup
 }
 
-func setRouteMethod(route schema.Route, groupCore *echo.Group, service schema.ActionService) {
-	handler := getHandler(service)
-
+func setRouteMethod(route schema.Route, groupCore *echo.Group, handler func(c echo.Context) error) {
 	switch route.Method {
 	case http.MethodGet:
 		groupCore.GET(route.EndPoint, handler)
@@ -94,15 +88,6 @@ func setRouteMethod(route schema.Route, groupCore *echo.Group, service schema.Ac
 	default:
 		println("Unsupported method: " + route.Method)
 	}
-}
-
-func getHandler(service schema.ActionService) func(c echo.Context) error {
-	handler := func(c echo.Context) error {
-		service(c)
-		return c.String(http.StatusOK, "money-manager")
-	}
-
-	return handler
 }
 
 func logSettedRoute(route schema.Route) {

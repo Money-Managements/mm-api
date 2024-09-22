@@ -1,4 +1,4 @@
-package account
+package routes
 
 import (
 	"money-manager/internal/constant"
@@ -6,16 +6,15 @@ import (
 	"net/http"
 )
 
-func GetRoutes() schema.RouteDetail {
+func GetLocationRoutes() schema.RouteDetail {
 	return schema.RouteDetail{
 		Routing: schema.Routing{
 			Version: constant.V1,
-			Group:   constant.Account,
+			Group:   constant.Location,
 		},
 		Routes: []schema.Route{
 			{
-				ServiceName: constant.AcccountServiceGet,
-				Method:      http.MethodGet,
+				Method: http.MethodGet,
 			},
 		},
 	}

@@ -1,9 +1,9 @@
-package model
+package models
 
-import "time"
+import "gorm.io/gorm"
 
 type Transaction struct {
-	ID                 uint
+	gorm.Model
 	Description        string
 	Type               int
 	ManagementID       uint
@@ -13,6 +13,4 @@ type Transaction struct {
 	OriginAccount      Account
 	TargetAccountID    uint
 	TargetAccount      Account
-	CreatedAt          time.Time
-	UpdatedAt          time.Time
 }

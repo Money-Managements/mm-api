@@ -1,4 +1,4 @@
-package manager
+package routes
 
 import (
 	"money-manager/internal/constant"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func GetRoutes() schema.RouteDetail {
+func GetManagerRoutes() schema.RouteDetail {
 	return schema.RouteDetail{
 		Routing: schema.Routing{
 			Version: constant.V1,
@@ -14,8 +14,7 @@ func GetRoutes() schema.RouteDetail {
 		},
 		Routes: []schema.Route{
 			{
-				ServiceName: constant.ManagerServiceAdd,
-				Method:      http.MethodPost,
+				Method: http.MethodPost,
 			},
 		},
 	}
