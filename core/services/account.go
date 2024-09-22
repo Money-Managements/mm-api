@@ -5,16 +5,26 @@ import (
 	"money-manager/internal/constant"
 )
 
-func GetAccount() {
+type GetAccountFilter struct {
+	ID           uint
+	Name         string
+	Type         constant.AccountType
+	ManagementID constant.UUID
+}
+
+func GetAccount(getAccountFilter GetAccountFilter) models.Account {
+	accountData := models.Account{}
+	d.DB.Where(&getAccountFilter).First(&accountData)
+	return accountData
 }
 
 type AddAccountDTO struct {
 	Name         string
 	Description  string
 	Type         constant.AccountType
-	ManagementID uint
-	LocationID   uint
-	Amount       float64
+	ManagementID constant.UUID
+	LocationID   constant.UUID
+	Amount       constant.Amount
 }
 
 func AddAccount(addAccountDTO AddAccountDTO) models.Account {
@@ -37,23 +47,26 @@ func AddAccount(addAccountDTO AddAccountDTO) models.Account {
 		})
 	}
 
-	if addAccountDTO.LocationID != 0 && addAccountDTO.Type == constant.AccountTypeAssign {
-		d.DB.First(&locationData, addAccountDTO.LocationID)
+	if addAccountDTO.LocationID != 0 && addAccountDTO.Type != constant.AccountTypeBank {
+		locationData = GetLocation(GetLocationFilter{
+			ID:           uint(addAccountDTO.LocationID),
+			ManagementID: addAccountDTO.ManagementID,
+		})
 	}
 
-	// money - money account
+	if addAccountDTO.LocationID == 0 && addAccountDTO.Type != constant.AccountTypeBank {
+		locationData = GetLocation(GetLocationFilter{
+			Name:         constant.LocationDefaultName,
+			ManagementID: addAccountDTO.ManagementID,
+		})
+	}
 
-	moneyData := models.Money{
+	//  money account
+	AddMoneyAccount(AddMoneyAccountDTO{
 		Amount:     addAccountDTO.Amount,
-		LocationID: locationData.ID,
-	}
-	d.DB.Create(&moneyData)
-
-	moneyAccountData := models.MoneyAccount{
-		AccountID: accountData.ID,
-		MoneyID:   moneyData.ID,
-	}
-	d.DB.Create(&moneyAccountData)
+		AccountID:  constant.UUID(accountData.ID),
+		LocationID: constant.UUID(locationData.ID),
+	})
 
 	return accountData
 }

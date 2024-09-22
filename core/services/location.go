@@ -1,14 +1,25 @@
 package services
 
-import "money-manager/core/models"
+import (
+	"money-manager/core/models"
+	"money-manager/internal/constant"
+)
 
-func GetLocation() {
+type GetLocationFilter struct {
+	ID           uint
+	Name         string
+	ManagementID constant.UUID
+}
 
+func GetLocation(getLocationFilter GetLocationFilter) models.Location {
+	locationData := models.Location{}
+	d.DB.Where(&getLocationFilter).First(&locationData)
+	return locationData
 }
 
 type AddLocationDTO struct {
 	Name         string
-	ManagementID uint
+	ManagementID constant.UUID
 }
 
 func AddLocation(addLocationDTO AddLocationDTO) models.Location {

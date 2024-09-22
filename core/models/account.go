@@ -11,6 +11,6 @@ type Account struct {
 	Name         string `gorm:"not null"`
 	Description  string
 	Type         constant.AccountType `gorm:"not null"`
-	ManagementID uint                 `gorm:"not null"`
-	MoneyAccount []MoneyAccount       `gorm:"not null"`
+	ManagementID constant.UUID        `gorm:"not null"`
+	MoneyAccount []MoneyAccount
 }

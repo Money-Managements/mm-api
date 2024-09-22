@@ -6,4 +6,10 @@ const (
 	AccountTypeBank AccountType = iota
 	AccountTypeAssign
 	AccountTypeHiddenIncome
+	AccountTypeHiddenSpend
+)
+
+const (
+	AccountDefaultNameIncome = "income"
+	AccountDefaultNameSpend  = "spend"
 )

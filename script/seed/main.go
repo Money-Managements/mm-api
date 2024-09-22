@@ -17,7 +17,8 @@ func main() {
 	})
 
 	managements := seedManager()
-	seedAccount(managements)
+	accounts := seedAccount(managements)
+	seedTransaction(accounts)
 }
 
 func seedManager() map[string]models.Management {
@@ -25,34 +26,82 @@ func seedManager() map[string]models.Management {
 		Name: "Shijiro",
 	})
 
-	totoroManagement := services.AddManagement(models.Management{
-		Name: "Tororo",
-	})
-
 	return map[string]models.Management{
 		shijiroManagement.Name: shijiroManagement,
-		totoroManagement.Name:  totoroManagement,
 	}
 }
 
-func seedAccount(managements map[string]models.Management) {
+func seedAccount(managements map[string]models.Management) map[string]models.Account {
+	createdAccounts := make(map[string]models.Account)
 	shijiroManagement := managements["Shijiro"]
 
-	services.AddAccount(services.AddAccountDTO{
+	accountLuloBank := services.AddAccount(services.AddAccountDTO{
 		Name:         "Lulo Bank",
 		Type:         constant.AccountTypeBank,
-		ManagementID: shijiroManagement.ID,
+		ManagementID: constant.UUID(shijiroManagement.ID),
 	})
+	createdAccounts["Lulo Bank"] = accountLuloBank
 
-	services.AddAccount(services.AddAccountDTO{
+	accountNuBank := services.AddAccount(services.AddAccountDTO{
 		Name:         "Nu Bank",
 		Type:         constant.AccountTypeBank,
-		ManagementID: shijiroManagement.ID,
+		ManagementID: constant.UUID(shijiroManagement.ID),
 	})
+	createdAccounts["Nu Bank"] = accountNuBank
 
-	services.AddAccount(services.AddAccountDTO{
+	accountNequi := services.AddAccount(services.AddAccountDTO{
 		Name:         "Nequi",
 		Type:         constant.AccountTypeBank,
-		ManagementID: shijiroManagement.ID,
+		ManagementID: constant.UUID(shijiroManagement.ID),
+	})
+	createdAccounts["Nequi"] = accountNequi
+
+	accountSupport := services.AddAccount(services.AddAccountDTO{
+		Name:         "Support",
+		Type:         constant.AccountTypeAssign,
+		ManagementID: constant.UUID(shijiroManagement.ID),
+	})
+	createdAccounts["Support"] = accountSupport
+
+	accountMotorcycle := services.AddAccount(services.AddAccountDTO{
+		Name:         "Motorcycle",
+		Type:         constant.AccountTypeAssign,
+		ManagementID: constant.UUID(shijiroManagement.ID),
+	})
+	createdAccounts["Motorcycle"] = accountMotorcycle
+
+	accountServices := services.AddAccount(services.AddAccountDTO{
+		Name:         "Services",
+		Type:         constant.AccountTypeAssign,
+		ManagementID: constant.UUID(shijiroManagement.ID),
+	})
+	createdAccounts["Services"] = accountServices
+
+	return createdAccounts
+}
+
+func seedTransaction(accounts map[string]models.Account) {
+	accountNequi := accounts["Nequi"]
+	locationData := services.GetLocation(services.GetLocationFilter{
+		Name:         accountNequi.Name,
+		ManagementID: accountNequi.ManagementID,
+	})
+
+	services.AddTransaction(services.AddTransactionDTO{
+		Description:     "Income from job",
+		Type:            constant.TransactionTypeIncome,
+		TargetAccountID: constant.UUID(accountNequi.ID),
+		ManagementID:    accountNequi.ManagementID,
+		Amount:          300000,
+		LocationID:      constant.UUID(locationData.ID),
+	})
+
+	services.AddTransaction(services.AddTransactionDTO{
+		Description:     "Spend with my gf",
+		Type:            constant.TransactionTypeSpend,
+		OriginAccountID: constant.UUID(accountNequi.ID),
+		ManagementID:    accountNequi.ManagementID,
+		Amount:          40000,
+		LocationID:      constant.UUID(locationData.ID),
 	})
 }
