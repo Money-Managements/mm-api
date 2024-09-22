@@ -15,8 +15,6 @@ type AddTransactionDTO struct {
 	Amount          constant.Amount
 }
 
-// TODO: improve this. One function for income and spend. And another different for transfers
-// func AddTransactionIncome AddTransactionSpend func AddTransactonTransfer
 func AddTransaction(addTransactionDTO AddTransactionDTO) models.Transaction {
 	transactionData := models.Transaction{
 		Description:  addTransactionDTO.Description,
@@ -45,7 +43,8 @@ func AddTransaction(addTransactionDTO AddTransactionDTO) models.Transaction {
 	}
 
 	if addTransactionDTO.Type == constant.TransactionTypeTransfer {
-
+		transactionData.TargetAccountID = addTransactionDTO.TargetAccountID
+		transactionData.OriginAccountID = addTransactionDTO.OriginAccountID
 	}
 
 	d.DB.Create(&transactionData)
@@ -57,4 +56,66 @@ func AddTransaction(addTransactionDTO AddTransactionDTO) models.Transaction {
 	})
 
 	return transactionData
+}
+
+//
+
+type AddTransactionBaseDTO struct {
+	Description  string
+	ManagementID constant.UUID
+	LocationID   constant.UUID
+	Amount       constant.Amount
+}
+
+//
+
+type AddTransactionIncomeDTO struct {
+	AddTransactionBaseDTO
+	AccountID constant.UUID
+}
+
+func AddTransactionIncome(addTransactionIncomeDTO AddTransactionIncomeDTO) models.Transaction {
+	return AddTransaction(AddTransactionDTO{
+		Description:     addTransactionIncomeDTO.Description,
+		ManagementID:    addTransactionIncomeDTO.ManagementID,
+		Amount:          addTransactionIncomeDTO.Amount,
+		LocationID:      addTransactionIncomeDTO.LocationID,
+		TargetAccountID: addTransactionIncomeDTO.AccountID,
+		Type:            constant.TransactionTypeIncome,
+	})
+}
+
+type AddTransactionSpendDTO struct {
+	AddTransactionBaseDTO
+	AccountID constant.UUID
+}
+
+func AddTransactionSpend(addTransactionSpendDTO AddTransactionSpendDTO) models.Transaction {
+	return AddTransaction(AddTransactionDTO{
+		Description:     addTransactionSpendDTO.Description,
+		ManagementID:    addTransactionSpendDTO.ManagementID,
+		Amount:          addTransactionSpendDTO.Amount,
+		LocationID:      addTransactionSpendDTO.LocationID,
+		OriginAccountID: addTransactionSpendDTO.AccountID,
+		Type:            constant.TransactionTypeSpend,
+	})
+}
+
+type AddTransactionTransferDTO struct {
+	AddTransactionBaseDTO
+	TargetAccountID constant.UUID
+	OriginAccountID constant.UUID
+}
+
+func AddTransactionTransfer(addTransactionTransferDTO AddTransactionTransferDTO) models.Transaction {
+	return AddTransaction(AddTransactionDTO{
+		Description:     addTransactionTransferDTO.Description,
+		ManagementID:    addTransactionTransferDTO.ManagementID,
+		Amount:          addTransactionTransferDTO.Amount,
+		LocationID:      addTransactionTransferDTO.LocationID,
+		TargetAccountID: addTransactionTransferDTO.TargetAccountID,
+		OriginAccountID: addTransactionTransferDTO.OriginAccountID,
+		Type:            constant.TransactionTypeTransfer,
+	})
+
 }

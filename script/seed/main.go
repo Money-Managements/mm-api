@@ -82,26 +82,41 @@ func seedAccount(managements map[string]models.Management) map[string]models.Acc
 
 func seedTransaction(accounts map[string]models.Account) {
 	accountNequi := accounts["Nequi"]
+	accountLuloBank := accounts["Lulo Bank"]
+
 	locationData := services.GetLocation(services.GetLocationFilter{
 		Name:         accountNequi.Name,
 		ManagementID: accountNequi.ManagementID,
 	})
 
-	services.AddTransaction(services.AddTransactionDTO{
-		Description:     "Income from job",
-		Type:            constant.TransactionTypeIncome,
-		TargetAccountID: constant.UUID(accountNequi.ID),
-		ManagementID:    accountNequi.ManagementID,
-		Amount:          300000,
-		LocationID:      constant.UUID(locationData.ID),
+	services.AddTransactionIncome(services.AddTransactionIncomeDTO{
+		AccountID: constant.UUID(accountNequi.ID),
+		AddTransactionBaseDTO: services.AddTransactionBaseDTO{
+			Description:  "Income from job",
+			ManagementID: accountNequi.ManagementID,
+			Amount:       300000,
+			LocationID:   constant.UUID(locationData.ID),
+		},
 	})
 
-	services.AddTransaction(services.AddTransactionDTO{
-		Description:     "Spend with my gf",
-		Type:            constant.TransactionTypeSpend,
+	services.AddTransactionSpend(services.AddTransactionSpendDTO{
+		AccountID: constant.UUID(accountNequi.ID),
+		AddTransactionBaseDTO: services.AddTransactionBaseDTO{
+			Description:  "Dinner with friends",
+			ManagementID: accountNequi.ManagementID,
+			Amount:       6000,
+			LocationID:   constant.UUID(locationData.ID),
+		},
+	})
+
+	services.AddTransactionTransfer(services.AddTransactionTransferDTO{
+		TargetAccountID: constant.UUID(accountLuloBank.ID),
 		OriginAccountID: constant.UUID(accountNequi.ID),
-		ManagementID:    accountNequi.ManagementID,
-		Amount:          40000,
-		LocationID:      constant.UUID(locationData.ID),
+		AddTransactionBaseDTO: services.AddTransactionBaseDTO{
+			Description:  "Transfering",
+			ManagementID: accountNequi.ManagementID,
+			Amount:       600,
+			LocationID:   constant.UUID(locationData.ID),
+		},
 	})
 }
