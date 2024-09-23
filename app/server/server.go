@@ -1,19 +1,16 @@
 package server
 
 import (
-	"money-manager/core/services"
+	"money-manager/app/middleware"
 
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
-func StartServer(db *gorm.DB) {
+func StartServer() {
 	e := echo.New()
 
-	services.SetServicesDependencies(services.Dependencies{
-		DB: db,
-	})
-
+	middleware.SetCors(e)
 	setRoutes(e)
+
 	e.Logger.Fatal(e.Start(":8080"))
 }

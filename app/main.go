@@ -3,9 +3,11 @@ package main
 import (
 	"money-manager/app/db"
 	"money-manager/app/server"
+	"money-manager/app/service"
 )
 
 func main() {
 	db := db.ConnectDB()
-	server.StartServer(db)
+	service.SetServices(db)
+	server.StartServer()
 }
