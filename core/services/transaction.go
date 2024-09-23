@@ -12,6 +12,7 @@ type AddTransactionDTO struct {
 	TargetAccountID constant.UUID
 	OriginAccountID constant.UUID
 	LocationID      constant.UUID
+	OperationID     constant.UUID
 	Amount          constant.Amount
 }
 
@@ -20,6 +21,7 @@ func AddTransaction(addTransactionDTO AddTransactionDTO) models.Transaction {
 		Description:  addTransactionDTO.Description,
 		Type:         addTransactionDTO.Type,
 		ManagementID: addTransactionDTO.ManagementID,
+		OperationID:  addTransactionDTO.OperationID,
 	}
 
 	getAccountFilter := GetAccountFilter{
@@ -64,6 +66,7 @@ type AddTransactionBaseDTO struct {
 	Description  string
 	ManagementID constant.UUID
 	LocationID   constant.UUID
+	OperationID  constant.UUID
 	Amount       constant.Amount
 }
 
@@ -81,6 +84,7 @@ func AddTransactionIncome(addTransactionIncomeDTO AddTransactionIncomeDTO) model
 		Amount:          addTransactionIncomeDTO.Amount,
 		LocationID:      addTransactionIncomeDTO.LocationID,
 		TargetAccountID: addTransactionIncomeDTO.AccountID,
+		OperationID:     addTransactionIncomeDTO.OperationID,
 		Type:            constant.TransactionTypeIncome,
 	})
 }
@@ -97,6 +101,7 @@ func AddTransactionSpend(addTransactionSpendDTO AddTransactionSpendDTO) models.T
 		Amount:          addTransactionSpendDTO.Amount,
 		LocationID:      addTransactionSpendDTO.LocationID,
 		OriginAccountID: addTransactionSpendDTO.AccountID,
+		OperationID:     addTransactionSpendDTO.OperationID,
 		Type:            constant.TransactionTypeSpend,
 	})
 }
@@ -115,6 +120,7 @@ func AddTransactionTransfer(addTransactionTransferDTO AddTransactionTransferDTO)
 		LocationID:      addTransactionTransferDTO.LocationID,
 		TargetAccountID: addTransactionTransferDTO.TargetAccountID,
 		OriginAccountID: addTransactionTransferDTO.OriginAccountID,
+		OperationID:     addTransactionTransferDTO.OperationID,
 		Type:            constant.TransactionTypeTransfer,
 	})
 

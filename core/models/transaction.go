@@ -11,6 +11,8 @@ type Transaction struct {
 	Description     string
 	Type            constant.TransactionType `gorm:"not null"`
 	ManagementID    constant.UUID            `gorm:"not null"`
+	OperationID     constant.UUID            `gorm:"not null"`
+	Operation       Operation                `gorm:"not null"`
 	TargetAccountID constant.UUID            `gorm:"not null"`
 	TargetAccount   Account                  `gorm:"not null"`
 	OriginAccountID constant.UUID            `gorm:"not null"`

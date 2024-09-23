@@ -1,11 +1,14 @@
 package models
 
-import "time"
+import (
+	"money-manager/internal/constant"
+
+	"gorm.io/gorm"
+)
 
 type Operation struct {
-	ID          uint
-	Name        string
-	Description string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	gorm.Model
+	Name         string `gorm:"not null"`
+	Description  string
+	ManagementID constant.UUID `gorm:"not null"`
 }

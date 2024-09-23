@@ -74,6 +74,7 @@ func AutoMigrations(db *gorm.DB) {
 	db.AutoMigrate(&models.Money{})
 	db.AutoMigrate(&models.Location{})
 	db.AutoMigrate(&models.Transaction{})
+	db.AutoMigrate(&models.Operation{})
 }
 
 func DropTables(db *gorm.DB) {
@@ -84,4 +85,5 @@ func DropTables(db *gorm.DB) {
 	db.Migrator().DropTable(&models.Money{})
 	db.Migrator().DropTable(&models.Location{})
 	db.Migrator().DropTable(&models.Transaction{})
+	db.Migrator().DropTable(&models.Operation{})
 }
