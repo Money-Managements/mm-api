@@ -1,12 +1,12 @@
-package middleware
+package middlewares
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	md "github.com/labstack/echo/v4/middleware"
 )
 
 func SetCors(e *echo.Echo) {
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+	e.Use(md.CORSWithConfig(md.CORSConfig{
 		AllowOrigins: []string{"http://localhost:3000"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))

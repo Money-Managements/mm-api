@@ -1,7 +1,7 @@
 package server
 
 import (
-	"money-manager/app/middleware"
+	"money-manager/app/middlewares"
 
 	"github.com/labstack/echo/v4"
 )
@@ -9,7 +9,8 @@ import (
 func StartServer() {
 	e := echo.New()
 
-	middleware.SetCors(e)
+	middlewares.SetCors(e)
+	middlewares.SetHttpError(e)
 	setRoutes(e)
 
 	e.Logger.Fatal(e.Start(":8080"))

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"money-manager/core/helpers"
 	"money-manager/core/services"
 	"net/http"
 
@@ -14,6 +15,12 @@ type GetAccountResponseDTO struct {
 }
 
 func GetAccountHandler(c echo.Context) error {
+
+	errorResponse := helpers.GetErrorResponse(helpers.GetErrorResponseArg{
+		StatusCode: http.StatusBadRequest,
+		ErrorType:  helpers.BodyPropInvalid,
+	})
+
 	accountData := services.GetAccount(services.GetAccountFilter{
 		ID: 1,
 	})
@@ -22,6 +29,10 @@ func GetAccountHandler(c echo.Context) error {
 		ID:          accountData.ID,
 		Name:        accountData.Name,
 		Description: accountData.Description,
+	}
+
+	if errorResponse.Code == http.StatusBadRequest {
+		panic("something went wrong")
 	}
 
 	return c.JSON(http.StatusOK, getAccountResponseDTO)
