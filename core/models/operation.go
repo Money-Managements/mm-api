@@ -1,14 +1,8 @@
 package models
 
-import (
-	"money-manager/internal/constant"
-
-	"gorm.io/gorm"
-)
-
 type Operation struct {
-	gorm.Model
+	Model
 	Name         string `gorm:"not null"`
 	Description  string
-	ManagementID constant.UUID `gorm:"not null"`
+	ManagementID ID `gorm:"not null"`
 }

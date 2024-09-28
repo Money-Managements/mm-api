@@ -2,14 +2,13 @@ package services
 
 import (
 	"money-manager/core/models"
-	"money-manager/internal/constant"
 )
 
 type GetAccountFilter struct {
 	ID           uint
 	Name         string
-	Type         constant.AccountType
-	ManagementID constant.UUID
+	Type         models.AccountType
+	ManagementID models.ID
 }
 
 func GetAccount(getAccountFilter GetAccountFilter) models.Account {
@@ -21,10 +20,10 @@ func GetAccount(getAccountFilter GetAccountFilter) models.Account {
 type AddAccountDTO struct {
 	Name         string
 	Description  string
-	Type         constant.AccountType
-	ManagementID constant.UUID
-	LocationID   constant.UUID
-	Amount       constant.Amount
+	Type         models.AccountType
+	ManagementID models.ID
+	LocationID   models.ID
+	Amount       models.Amount
 }
 
 func AddAccount(addAccountDTO AddAccountDTO) models.Account {
@@ -40,23 +39,23 @@ func AddAccount(addAccountDTO AddAccountDTO) models.Account {
 
 	locationData := models.Location{}
 
-	if addAccountDTO.LocationID == 0 && addAccountDTO.Type == constant.AccountTypeBank {
+	if addAccountDTO.LocationID == 0 && addAccountDTO.Type == models.AccountTypeBank {
 		locationData = AddLocation(AddLocationDTO{
 			Name:         addAccountDTO.Name,
 			ManagementID: addAccountDTO.ManagementID,
 		})
 	}
 
-	if addAccountDTO.LocationID != 0 && addAccountDTO.Type != constant.AccountTypeBank {
+	if addAccountDTO.LocationID != 0 && addAccountDTO.Type != models.AccountTypeBank {
 		locationData = GetLocation(GetLocationFilter{
 			ID:           uint(addAccountDTO.LocationID),
 			ManagementID: addAccountDTO.ManagementID,
 		})
 	}
 
-	if addAccountDTO.LocationID == 0 && addAccountDTO.Type != constant.AccountTypeBank {
+	if addAccountDTO.LocationID == 0 && addAccountDTO.Type != models.AccountTypeBank {
 		locationData = GetLocation(GetLocationFilter{
-			Name:         constant.LocationDefaultName,
+			Name:         models.LocationDefaultName,
 			ManagementID: addAccountDTO.ManagementID,
 		})
 	}
@@ -64,8 +63,8 @@ func AddAccount(addAccountDTO AddAccountDTO) models.Account {
 	//  money account
 	AddMoneyAccount(AddMoneyAccountDTO{
 		Amount:     addAccountDTO.Amount,
-		AccountID:  constant.UUID(accountData.ID),
-		LocationID: constant.UUID(locationData.ID),
+		AccountID:  accountData.ID,
+		LocationID: locationData.ID,
 	})
 
 	return accountData

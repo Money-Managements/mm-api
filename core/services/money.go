@@ -2,12 +2,11 @@ package services
 
 import (
 	"money-manager/core/models"
-	"money-manager/internal/constant"
 )
 
 type AddMoneyDTO struct {
-	Amount     constant.Amount
-	LocationID constant.UUID
+	Amount     models.Amount
+	LocationID models.ID
 }
 
 func AddMoney(addMoneyDTO AddMoneyDTO) models.Money {
@@ -23,9 +22,9 @@ func AddMoney(addMoneyDTO AddMoneyDTO) models.Money {
 // money account
 
 type AddMoneyAccountDTO struct {
-	Amount     constant.Amount
-	AccountID  constant.UUID
-	LocationID constant.UUID
+	Amount     models.Amount
+	AccountID  models.ID
+	LocationID models.ID
 }
 
 func AddMoneyAccount(addMoneyAccountDTO AddMoneyAccountDTO) models.MoneyAccount {
@@ -36,7 +35,7 @@ func AddMoneyAccount(addMoneyAccountDTO AddMoneyAccountDTO) models.MoneyAccount 
 
 	moneyAccountData := models.MoneyAccount{
 		AccountID: addMoneyAccountDTO.AccountID,
-		MoneyID:   constant.UUID(moneyData.ID),
+		MoneyID:   moneyData.ID,
 	}
 
 	d.DB.Create(&moneyAccountData)
@@ -46,9 +45,9 @@ func AddMoneyAccount(addMoneyAccountDTO AddMoneyAccountDTO) models.MoneyAccount 
 // money transaction
 
 type AddMoneyTransactionDTO struct {
-	Amount        constant.Amount
-	TransactionID constant.UUID
-	LocationID    constant.UUID
+	Amount        models.Amount
+	TransactionID models.ID
+	LocationID    models.ID
 }
 
 func AddMoneyTransaction(addTransactionDTO AddMoneyTransactionDTO) models.MoneyTransaction {
@@ -59,7 +58,7 @@ func AddMoneyTransaction(addTransactionDTO AddMoneyTransactionDTO) models.MoneyT
 
 	moneyTransactionData := models.MoneyTransaction{
 		TransactionID: addTransactionDTO.TransactionID,
-		MoneyID:       constant.UUID(moneyData.ID),
+		MoneyID:       moneyData.ID,
 	}
 
 	d.DB.Create(&moneyTransactionData)

@@ -2,13 +2,12 @@ package services
 
 import (
 	"money-manager/core/models"
-	"money-manager/internal/constant"
 )
 
 type GetLocationFilter struct {
 	ID           uint
 	Name         string
-	ManagementID constant.UUID
+	ManagementID models.ID
 }
 
 func GetLocation(getLocationFilter GetLocationFilter) models.Location {
@@ -19,7 +18,7 @@ func GetLocation(getLocationFilter GetLocationFilter) models.Location {
 
 type AddLocationDTO struct {
 	Name         string
-	ManagementID constant.UUID
+	ManagementID models.ID
 }
 
 func AddLocation(addLocationDTO AddLocationDTO) models.Location {

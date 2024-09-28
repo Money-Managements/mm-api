@@ -1,22 +1,24 @@
 package models
 
-import (
-	"money-manager/internal/constant"
+type TransactionType int
 
-	"gorm.io/gorm"
+const (
+	TransactionTypeIncome TransactionType = iota
+	TransactionTypeSpend
+	TransactionTypeTransfer
 )
 
 type Transaction struct {
-	gorm.Model
+	Model
 	Description     string
-	Type            constant.TransactionType `gorm:"not null"`
-	ManagementID    constant.UUID            `gorm:"not null"`
-	OperationID     constant.UUID            `gorm:"not null"`
-	Operation       Operation                `gorm:"not null"`
-	TargetAccountID constant.UUID            `gorm:"not null"`
-	TargetAccount   Account                  `gorm:"not null"`
-	OriginAccountID constant.UUID            `gorm:"not null"`
-	OriginAccount   Account                  `gorm:"not null"`
+	Type            TransactionType `gorm:"not null"`
+	ManagementID    ID              `gorm:"not null"`
+	OperationID     ID              `gorm:"not null"`
+	Operation       Operation       `gorm:"not null"`
+	TargetAccountID ID              `gorm:"not null"`
+	TargetAccount   Account         `gorm:"not null"`
+	OriginAccountID ID              `gorm:"not null"`
+	OriginAccount   Account         `gorm:"not null"`
 }
 
 // MoneyTransactionID constant.UUID            `gorm:"not null"`

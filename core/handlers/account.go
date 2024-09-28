@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"money-manager/core/helpers"
+	"money-manager/core/models"
 	"money-manager/core/services"
 	"net/http"
 
@@ -9,7 +10,7 @@ import (
 )
 
 type GetAccountResponseDTO struct {
-	ID          uint
+	ID          models.ID
 	Name        string
 	Description string
 }

@@ -2,7 +2,6 @@ package services
 
 import (
 	"money-manager/core/models"
-	"money-manager/internal/constant"
 )
 
 func GetManagement() {
@@ -13,24 +12,24 @@ func AddManagement(dataManagement models.Management) models.Management {
 	d.DB.Create(&dataManagement)
 
 	locationData := AddLocation(AddLocationDTO{
-		Name:         constant.LocationDefaultName,
-		ManagementID: constant.UUID(dataManagement.ID),
+		Name:         models.LocationDefaultName,
+		ManagementID: dataManagement.ID,
 	})
 
 	AddAccount(AddAccountDTO{
-		Name:         constant.AccountDefaultNameIncome,
-		Type:         constant.AccountTypeHiddenIncome,
-		ManagementID: constant.UUID(dataManagement.ID),
+		Name:         models.AccountDefaultNameIncome,
+		Type:         models.AccountTypeHiddenIncome,
+		ManagementID: dataManagement.ID,
 		Amount:       0,
-		LocationID:   constant.UUID(locationData.ID),
+		LocationID:   locationData.ID,
 	})
 
 	AddAccount(AddAccountDTO{
-		Name:         constant.AccountDefaultNameSpend,
-		Type:         constant.AccountTypeHiddenSpend,
-		ManagementID: constant.UUID(dataManagement.ID),
+		Name:         models.AccountDefaultNameSpend,
+		Type:         models.AccountTypeHiddenSpend,
+		ManagementID: dataManagement.ID,
 		Amount:       0,
-		LocationID:   constant.UUID(locationData.ID),
+		LocationID:   locationData.ID,
 	})
 
 	return dataManagement

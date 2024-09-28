@@ -1,10 +1,16 @@
 package models
 
-import "gorm.io/gorm"
-
 type Management struct {
-	gorm.Model
-	Name         string
-	Accounts     []Account
-	Transactions []Transaction
+	Model
+	Name            string
+	Accounts        []Account
+	Transactions    []Transaction
+	ManagementUsers []ManagementUser
+}
+
+type ManagementUser struct {
+	Model
+	ManagementID int
+	UserID       int
+	User         User
 }

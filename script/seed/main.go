@@ -4,7 +4,6 @@ import (
 	"money-manager/app/db"
 	"money-manager/core/models"
 	"money-manager/core/services"
-	"money-manager/internal/constant"
 )
 
 func main() {
@@ -33,22 +32,22 @@ func seedManagement() models.Management {
 func seedOperation(management models.Management) {
 	services.AddOperation(services.AddOperationDTO{
 		Name:         "Water Service",
-		ManagementID: constant.UUID(management.ID),
+		ManagementID: management.ID,
 	})
 
 	services.AddOperation(services.AddOperationDTO{
 		Name:         "Gym",
-		ManagementID: constant.UUID(management.ID),
+		ManagementID: management.ID,
 	})
 
 	services.AddOperation(services.AddOperationDTO{
 		Name:         "Home Support",
-		ManagementID: constant.UUID(management.ID),
+		ManagementID: management.ID,
 	})
 
 	services.AddOperation(services.AddOperationDTO{
 		Name:         "Internet",
-		ManagementID: constant.UUID(management.ID),
+		ManagementID: management.ID,
 	})
 }
 
@@ -57,43 +56,43 @@ func seedAccount(management models.Management) map[string]models.Account {
 
 	accountLuloBank := services.AddAccount(services.AddAccountDTO{
 		Name:         "Lulo Bank",
-		Type:         constant.AccountTypeBank,
-		ManagementID: constant.UUID(management.ID),
+		Type:         models.AccountTypeBank,
+		ManagementID: management.ID,
 	})
 	createdAccounts["Lulo Bank"] = accountLuloBank
 
 	accountNuBank := services.AddAccount(services.AddAccountDTO{
 		Name:         "Nu Bank",
-		Type:         constant.AccountTypeBank,
-		ManagementID: constant.UUID(management.ID),
+		Type:         models.AccountTypeBank,
+		ManagementID: management.ID,
 	})
 	createdAccounts["Nu Bank"] = accountNuBank
 
 	accountNequi := services.AddAccount(services.AddAccountDTO{
 		Name:         "Nequi",
-		Type:         constant.AccountTypeBank,
-		ManagementID: constant.UUID(management.ID),
+		Type:         models.AccountTypeBank,
+		ManagementID: management.ID,
 	})
 	createdAccounts["Nequi"] = accountNequi
 
 	accountSupport := services.AddAccount(services.AddAccountDTO{
 		Name:         "Support",
-		Type:         constant.AccountTypeAssign,
-		ManagementID: constant.UUID(management.ID),
+		Type:         models.AccountTypeAssign,
+		ManagementID: management.ID,
 	})
 	createdAccounts["Support"] = accountSupport
 
 	accountMotorcycle := services.AddAccount(services.AddAccountDTO{
 		Name:         "Motorcycle",
-		Type:         constant.AccountTypeAssign,
-		ManagementID: constant.UUID(management.ID),
+		Type:         models.AccountTypeAssign,
+		ManagementID: management.ID,
 	})
 	createdAccounts["Motorcycle"] = accountMotorcycle
 
 	accountServices := services.AddAccount(services.AddAccountDTO{
 		Name:         "Services",
-		Type:         constant.AccountTypeAssign,
-		ManagementID: constant.UUID(management.ID),
+		Type:         models.AccountTypeAssign,
+		ManagementID: management.ID,
 	})
 	createdAccounts["Services"] = accountServices
 
@@ -115,36 +114,36 @@ func seedTransaction(accounts map[string]models.Account) {
 	})
 
 	services.AddTransactionIncome(services.AddTransactionIncomeDTO{
-		AccountID: constant.UUID(accountNequi.ID),
+		AccountID: accountNequi.ID,
 		AddTransactionBaseDTO: services.AddTransactionBaseDTO{
 			Description:  "Income from job",
 			ManagementID: accountNequi.ManagementID,
 			Amount:       300000,
-			LocationID:   constant.UUID(locationData.ID),
-			OperationID:  constant.UUID(operationData.ID),
+			LocationID:   locationData.ID,
+			OperationID:  operationData.ID,
 		},
 	})
 
 	services.AddTransactionSpend(services.AddTransactionSpendDTO{
-		AccountID: constant.UUID(accountNequi.ID),
+		AccountID: accountNequi.ID,
 		AddTransactionBaseDTO: services.AddTransactionBaseDTO{
 			Description:  "Dinner with friends",
 			ManagementID: accountNequi.ManagementID,
 			Amount:       6000,
-			LocationID:   constant.UUID(locationData.ID),
-			OperationID:  constant.UUID(operationData.ID),
+			LocationID:   locationData.ID,
+			OperationID:  operationData.ID,
 		},
 	})
 
 	services.AddTransactionTransfer(services.AddTransactionTransferDTO{
-		TargetAccountID: constant.UUID(accountLuloBank.ID),
-		OriginAccountID: constant.UUID(accountNequi.ID),
+		TargetAccountID: accountLuloBank.ID,
+		OriginAccountID: accountNequi.ID,
 		AddTransactionBaseDTO: services.AddTransactionBaseDTO{
 			Description:  "Transfering",
 			ManagementID: accountNequi.ManagementID,
 			Amount:       600,
-			LocationID:   constant.UUID(locationData.ID),
-			OperationID:  constant.UUID(operationData.ID),
+			LocationID:   locationData.ID,
+			OperationID:  operationData.ID,
 		},
 	})
 }

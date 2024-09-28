@@ -1,16 +1,24 @@
 package models
 
-import (
-	"money-manager/internal/constant"
+type AccountType int
 
-	"gorm.io/gorm"
+const (
+	AccountTypeBank AccountType = iota
+	AccountTypeAssign
+	AccountTypeHiddenIncome
+	AccountTypeHiddenSpend
+)
+
+const (
+	AccountDefaultNameIncome = "income"
+	AccountDefaultNameSpend  = "spend"
 )
 
 type Account struct {
-	gorm.Model
+	Model
 	Name         string `gorm:"not null"`
 	Description  string
-	Type         constant.AccountType `gorm:"not null"`
-	ManagementID constant.UUID        `gorm:"not null"`
+	Type         AccountType `gorm:"not null"`
+	ManagementID ID          `gorm:"not null"`
 	MoneyAccount []MoneyAccount
 }

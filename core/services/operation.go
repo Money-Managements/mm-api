@@ -2,13 +2,12 @@ package services
 
 import (
 	"money-manager/core/models"
-	"money-manager/internal/constant"
 )
 
 type GetOperatonFilter struct {
-	ID           constant.UUID
+	ID           models.ID
 	Name         string
-	ManagementID constant.UUID
+	ManagementID models.ID
 }
 
 func GetOperation(getOperatonFilter GetOperatonFilter) models.Operation {
@@ -20,7 +19,7 @@ func GetOperation(getOperatonFilter GetOperatonFilter) models.Operation {
 type AddOperationDTO struct {
 	Name         string
 	Description  string
-	ManagementID constant.UUID
+	ManagementID models.ID
 }
 
 func AddOperation(addOperationDTO AddOperationDTO) models.Operation {

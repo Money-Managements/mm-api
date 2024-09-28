@@ -1,13 +1,11 @@
 package models
 
-import (
-	"money-manager/internal/constant"
-
-	"gorm.io/gorm"
+const (
+	LocationDefaultName = "Default"
 )
 
 type Location struct {
-	gorm.Model
-	Name         string        `gorm:"not null"`
-	ManagementID constant.UUID `gorm:"not null"`
+	Model
+	Name         string `gorm:"not null"`
+	ManagementID ID     `gorm:"not null"`
 }

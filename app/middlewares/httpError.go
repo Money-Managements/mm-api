@@ -9,7 +9,6 @@ import (
 )
 
 func SetHttpError(e *echo.Echo) {
-
 	e.Use(md.RecoverWithConfig(md.RecoverConfig{
 		DisablePrintStack: true,
 	}))

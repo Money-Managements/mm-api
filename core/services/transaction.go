@@ -2,18 +2,17 @@ package services
 
 import (
 	"money-manager/core/models"
-	"money-manager/internal/constant"
 )
 
 type AddTransactionDTO struct {
 	Description     string
-	Type            constant.TransactionType
-	ManagementID    constant.UUID
-	TargetAccountID constant.UUID
-	OriginAccountID constant.UUID
-	LocationID      constant.UUID
-	OperationID     constant.UUID
-	Amount          constant.Amount
+	Type            models.TransactionType
+	ManagementID    models.ID
+	TargetAccountID models.ID
+	OriginAccountID models.ID
+	LocationID      models.ID
+	OperationID     models.ID
+	Amount          models.Amount
 }
 
 func AddTransaction(addTransactionDTO AddTransactionDTO) models.Transaction {
@@ -28,23 +27,23 @@ func AddTransaction(addTransactionDTO AddTransactionDTO) models.Transaction {
 		ManagementID: addTransactionDTO.ManagementID,
 	}
 
-	if addTransactionDTO.Type == constant.TransactionTypeIncome {
-		getAccountFilter.Type = constant.AccountTypeHiddenIncome
+	if addTransactionDTO.Type == models.TransactionTypeIncome {
+		getAccountFilter.Type = models.AccountTypeHiddenIncome
 		accountIncomeData := GetAccount(getAccountFilter)
 
-		transactionData.OriginAccountID = constant.UUID(accountIncomeData.ID)
+		transactionData.OriginAccountID = accountIncomeData.ID
 		transactionData.TargetAccountID = addTransactionDTO.TargetAccountID
 	}
 
-	if addTransactionDTO.Type == constant.TransactionTypeSpend {
-		getAccountFilter.Type = constant.AccountTypeHiddenSpend
+	if addTransactionDTO.Type == models.TransactionTypeSpend {
+		getAccountFilter.Type = models.AccountTypeHiddenSpend
 		accountSpendData := GetAccount(getAccountFilter)
 
-		transactionData.TargetAccountID = constant.UUID(accountSpendData.ID)
+		transactionData.TargetAccountID = accountSpendData.ID
 		transactionData.OriginAccountID = addTransactionDTO.OriginAccountID
 	}
 
-	if addTransactionDTO.Type == constant.TransactionTypeTransfer {
+	if addTransactionDTO.Type == models.TransactionTypeTransfer {
 		transactionData.TargetAccountID = addTransactionDTO.TargetAccountID
 		transactionData.OriginAccountID = addTransactionDTO.OriginAccountID
 	}
@@ -53,7 +52,7 @@ func AddTransaction(addTransactionDTO AddTransactionDTO) models.Transaction {
 
 	AddMoneyTransaction(AddMoneyTransactionDTO{
 		Amount:        addTransactionDTO.Amount,
-		TransactionID: constant.UUID(transactionData.ID),
+		TransactionID: transactionData.ID,
 		LocationID:    addTransactionDTO.LocationID,
 	})
 
@@ -64,17 +63,17 @@ func AddTransaction(addTransactionDTO AddTransactionDTO) models.Transaction {
 
 type AddTransactionBaseDTO struct {
 	Description  string
-	ManagementID constant.UUID
-	LocationID   constant.UUID
-	OperationID  constant.UUID
-	Amount       constant.Amount
+	ManagementID models.ID
+	LocationID   models.ID
+	OperationID  models.ID
+	Amount       models.Amount
 }
 
 //
 
 type AddTransactionIncomeDTO struct {
 	AddTransactionBaseDTO
-	AccountID constant.UUID
+	AccountID models.ID
 }
 
 func AddTransactionIncome(addTransactionIncomeDTO AddTransactionIncomeDTO) models.Transaction {
@@ -85,13 +84,13 @@ func AddTransactionIncome(addTransactionIncomeDTO AddTransactionIncomeDTO) model
 		LocationID:      addTransactionIncomeDTO.LocationID,
 		TargetAccountID: addTransactionIncomeDTO.AccountID,
 		OperationID:     addTransactionIncomeDTO.OperationID,
-		Type:            constant.TransactionTypeIncome,
+		Type:            models.TransactionTypeIncome,
 	})
 }
 
 type AddTransactionSpendDTO struct {
 	AddTransactionBaseDTO
-	AccountID constant.UUID
+	AccountID models.ID
 }
 
 func AddTransactionSpend(addTransactionSpendDTO AddTransactionSpendDTO) models.Transaction {
@@ -102,14 +101,14 @@ func AddTransactionSpend(addTransactionSpendDTO AddTransactionSpendDTO) models.T
 		LocationID:      addTransactionSpendDTO.LocationID,
 		OriginAccountID: addTransactionSpendDTO.AccountID,
 		OperationID:     addTransactionSpendDTO.OperationID,
-		Type:            constant.TransactionTypeSpend,
+		Type:            models.TransactionTypeSpend,
 	})
 }
 
 type AddTransactionTransferDTO struct {
 	AddTransactionBaseDTO
-	TargetAccountID constant.UUID
-	OriginAccountID constant.UUID
+	TargetAccountID models.ID
+	OriginAccountID models.ID
 }
 
 func AddTransactionTransfer(addTransactionTransferDTO AddTransactionTransferDTO) models.Transaction {
@@ -121,7 +120,7 @@ func AddTransactionTransfer(addTransactionTransferDTO AddTransactionTransferDTO)
 		TargetAccountID: addTransactionTransferDTO.TargetAccountID,
 		OriginAccountID: addTransactionTransferDTO.OriginAccountID,
 		OperationID:     addTransactionTransferDTO.OperationID,
-		Type:            constant.TransactionTypeTransfer,
+		Type:            models.TransactionTypeTransfer,
 	})
 
 }
